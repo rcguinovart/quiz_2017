@@ -230,29 +230,42 @@ exports.randomcheck = function(req, res, next) {
 
 	//si  la respuesta es la correcta entonces suma puntos y si no no se los sumes y en el array de contestados di que ya están contestados cnt[-1]
 	if(result){
-		req.session.score = req.session.score + 1;}
-	else{
-		req.session.score = 0;
-		req.session.cnt = [-1];
-	}
+		req.session.score = req.session.score + 1;
 
-	models.Quiz.count()
-	.then(function(cuenta){
-		//si ya se han contestado todas las preguntas, se acaba el juego
-		if(req.session.score === cuenta){
-			req.session.cnt = [-1];
-			req.session.score = 0;
-			res.render('quizzes/random_nomore', {
-				score : req.session.score});
-		}
-		//si no, me lleva a la pagina de resultados
-		else{
-			res.render('quizzes/random_results',{
-				quiz: req.quiz,
-				result: result,
-				score: req.session.score,
-				answer: answer});
-			}
-	});
+        models.Quiz.count().then(function(cuenta){
+        //si ya se han contestado todas las preguntas, se acaba el juego
+        if(req.session.score === cuenta){
+            req.session.cnt = [-1]; 
+            var cuenta2= req.session.score; 
+            req.session.score = 0;    
+            res.render('quizzes/random_nomore', {
+                score : cuenta2});
+        
+        //si no, me lleva a la pagina de resultados
+        }
+        else{
+            res.render('quizzes/random_results',{
+                quiz: req.quiz,
+                result: result,
+                score: req.session.score,
+                answer: answer});
+            }
+        })}
+	
+    else{
+        var cuenta1= req.session.score;
+        req.session.score = 0;
+        req.session.cnt = [-1];
+        res.render('quizzes/random_results',{
+                quiz: req.quiz,
+                result: result,
+                score: cuenta1,
+                answer: answer});
+        
 
-};
+            }
+		};
+	   
+    
+
+
