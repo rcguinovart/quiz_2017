@@ -193,22 +193,21 @@ var score=0; //puntuación inicial: cero puntos
 
 // GET /quizzes/randomplay
 exports.randomplay = function (req,res,next){
-	
+
 	//Si no se ha iniciado la sesión, la puntuación inicial es cero
 	if (!req.session.score) req.session.score = 0;
 	//Inicializamos el juego, cnt es menos1 porque si no daba error
-	if(req.session.score === 0) req.session.cnt =[-1];
+	if(req.session.score === 0) req.session.cnt = [-1];
 
 	//La respuesta será lo del cajetin o vacío
-	var answer= req.query.answer || "";
-	
-	//
-	models.Quiz.count({ where:{
-		id:{$notIn : req.session.cnt}
+	var answer= req.query.answer || '';
+
+	models.Quiz.count({where:{
+		id:{$notIn: req.session.cnt}
 		}})
 	.then(function(cuenta){
-	aleatorio= Math.floor(Math.random() * (cuenta -0) +0);
-	return models.Quiz.findAll({where:{
+	aleatorio= Math.floor(Math.random() * (cuenta - 0) +0);
+	return models.Quiz.findAll({where:
 	{ id: {$notIn: req.session.cnt}
 	}})
 		.then(function(quiz){
@@ -219,8 +218,7 @@ exports.randomplay = function (req,res,next){
 		res.render('quizzes/random_play',{
 			quiz: pregunta,
 			answer: answer,
-			score: req.session.score;
-		});
+			score: req.session.score
 	});});});
 };
 
@@ -231,21 +229,21 @@ exports.randomcheck = function(req, res, next) {
 	var result = answer.toLowerCase().trim() === req.quiz.answer.toLowerCase().trim();
 
 	//si  la respuesta es la correcta entonces suma puntos y si no no se los sumes y en el array de contestados di que ya están contestados cnt[-1]
-	if(answer){
-		req.session.score = req.session.score +1;}
+	if(result){
+		req.session.score = req.session.score + 1;}
 	else{
 		req.session.score = 0;
 		req.session.cnt = [-1];
 	}
-	
+
 	models.Quiz.count()
 	.then(function(cuenta){
 		//si ya se han contestado todas las preguntas, se acaba el juego
 		if(req.session.score === cuenta){
-			req.session.score = 0;
 			req.session.cnt = [-1];
+			req.session.score = 0;
 			res.render('quizzes/random_nomore', {
-				score = req.session.score});
+				score : req.session.score});
 		}
 		//si no, me lleva a la pagina de resultados
 		else{
@@ -254,6 +252,7 @@ exports.randomcheck = function(req, res, next) {
 				result: result,
 				score: req.session.score,
 				answer: answer});
+			}
 	});
 
 };
