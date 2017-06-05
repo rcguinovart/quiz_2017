@@ -261,7 +261,7 @@ exports.randomcheck = function(req, res, next) {
         res.render('quizzes/random_results',{
                 quiz: req.quiz,
                 result: result,
-                score: eq.session.score,
+                score: req.session.score,
                 answer: answer});
         
 
