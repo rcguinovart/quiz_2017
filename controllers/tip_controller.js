@@ -92,7 +92,7 @@ exports.adminOrAuthorTipRequired = function(req,res,next){
     var isAuthor = req.quiz.AuthorId === req.session.user.id;
     var isAuthorTip = req.tip.AuthorId === req.session.user.id;
 
-    if (isAdmin || isAuthor || idAuthorTip) {
+    if (isAdmin || isAuthor || isAuthorTip) {
         next();
     } else {
         console.log('Operación prohibida: El usuario logeado no es el autor del quiz, ni un administrador.');
