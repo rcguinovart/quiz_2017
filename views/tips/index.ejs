@@ -10,7 +10,7 @@
 
         <% if (session.user) { %>
 
-        <% if (accepted || isAdmin || isQuizAuthor) { %>
+        <% if (accepted || isAdmin || isQuizAuthor || isTipAuthor) { %>
 
             <li>
                 <%= tip.text %>
@@ -30,9 +30,10 @@
                       </a>
 
                 <% } %>
+                <span id="autor"><small> (by <%= tip.Author ? tip.Author.username : "nosé" %>) </small></span>
              </li>
          <% } %>
-                <span id="autor"><small> (by <%= tip.Author ? tip.Author.username : "nosé" %>) </small></span>
+                
           <% } %>
     <% } %>
 </ul>
